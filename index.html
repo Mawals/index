@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <title>تسجيل المخالفات — نسخة المشرف (جوال) v8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script>
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxbM7zmeN1gW_ryUSVdTkI8XKkMFyICb2RYbjwBIzc5Hean6J35BI9efjODhvdlnw/exec';
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root{--green:#16a34a;--green-700:#15803d;--blue:#2563eb;--orange:#f59e0b;--red:#ef4444;--bg:#f3f6f9;--card:#fff;--border:#e5e7eb;--shadow:0 10px 24px rgba(0,0,0,.08)}
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;background:var(--bg);color:#0f172a;font-family:'Cairo',system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+    .banner-wrap{position:sticky;top:0;z-index:5;padding:8px 12px;background:linear-gradient(180deg,#0000,#0001)} .banner{margin:auto;width:100%;max-width:720px;background:#e6f9ee;color:#0b3d22;border:1px solid #bbf7d0;border-radius:999px;text-align:center;padding:10px 14px;font-weight:800;box-shadow:var(--shadow)}
+    .card{width:100%;max-width:720px;margin:12px auto;background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+    .card-header{padding:12px 14px;background:#fafafa;border-bottom:1px solid var(--border)} .card-title{margin:0;color:#16a34a;font-size:20px;font-weight:800;text-align:center}
+    form{padding:12px;display:grid;grid-template-columns:1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    .label{font-weight:900;color:#0f172a;display:flex;align-items:center;gap:8px;justify-content:space-between} .label .left{display:flex;align-items:center;gap:8px}
+    .badge{font-size:12px;font-weight:900;background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe;border-radius:999px;padding:2px 10px}
+    input,select,textarea{width:100%;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 14px;font-size:18px;outline:none;transition:border .15s,box-shadow .15s;display:block}
+    input:focus,select:focus,textarea:focus{border-color:#16a34a;box-shadow:0 0 0 4px rgba(34,197,94,.18)} textarea{min-height:120px;resize:vertical}
+    .table-wrap{padding:6px 12px 12px;overflow:auto;max-width:100%} table{width:100%;border-collapse:collapse;min-width:640px} th,td{padding:10px;border-bottom:1px dashed var(--border);text-align:right} th{background:#fafafa;position:sticky;top:0}
+    .actions-wrap{position:sticky;bottom:0;z-index:10;padding:8px 10px;background:#fff;border-top:1px solid var(--border);box-shadow:0 -6px 16px rgba(0,0,0,.06)}
+    .actions{max-width:720px;margin:auto;display:grid;grid-template-columns:1fr;gap:6px}
+    .btn{border:none;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;color:#fff;white-space:nowrap;box-shadow:var(--shadow);font-size:16px;line-height:1}
+    .btn .icon{font-size:18px;line-height:1} .btn.send{background:var(--green)} .btn.send:active{background:var(--green-700)}
+    .btn-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px} .btn.csv{background:var(--blue)} .btn.xlsx{background:var(--orange)} .btn.delete{background:var(--red)}
+    .toast{position:fixed;inset-inline:0;top:12px;margin:auto;background:#16a34a;color:#fff;padding:10px 16px;border-radius:999px;width:max-content;max-width:90vw;box-shadow:var(--shadow);display:none;font-size:16px}
+    .modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;z-index:50}
+    .modal .box{background:#fff;border-radius:16px;box-shadow:var(--shadow);padding:16px;width:min(92vw,420px)} .modal .box h3{margin:0 0 10px 0;text-align:center}
+    .modal .row{display:flex;gap:8px;align-items:center;justify-content:center} .modal input{border:1px solid var(--border);border-radius:12px;padding:10px 12px;font-size:18px;width:200px;text-align:center;letter-spacing:2px}
+    .modal .action{border:none;border-radius:12px;padding:10px 14px;font-weight:900;color:#fff;background:#16a34a;cursor:pointer} .modal .cancel{background:#94a3b8}
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast"></div>
+  <div class="banner-wrap"><div class="banner">نظام تسجيل المخالفات السلوكية للطلبة</div></div>
+
+  <div class="card">
+    <div class="card-header"><h2 class="card-title">تسجيل المخالفات السلوكية للطلبة</h2></div>
+    <form id="dataForm">
+      <div class="field"><div class="label"><span class="left">👤 اسم الطالب</span></div><input id="studentName" name="اسم الطالب" type="text" placeholder="اكتب اسم الطالب" required></div>
+      <div class="field"><div class="label"><span class="left">🏫 الصف الدراسي</span><span class="badge">مطلوب</span></div>
+        <select id="grade" name="الصف الدراسي" required>
+          <option value="">— اختر —</option><option>الخامس</option><option>السادس</option><option>السابع</option><option>الثامن</option><option>التاسع</option><option>العاشر</option><option>الحادي عشر</option><option>الثاني عشر</option>
+        </select>
+      </div>
+      <div class="field"><div class="label"><span class="left">🔢 الشعبة</span><span class="badge">مطلوب</span></div>
+        <select id="section" name="الشعبة" required>
+          <option value="">— اختر —</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+        </select>
+      </div>
+      <div class="field"><div class="label"><span class="left">⚠️ المخالفات الطلابية</span></div>
+        <select id="violation" name="المخالفات الطلابية">
+          <option value="">— اختر —</option><option>النوم في أثناء الحصص</option><option>عدم الالتزام بالزي المدرسي</option><option>الإساءة بالقول إلى أحد زملائه</option><option>الإهمال في أداء الواجبات</option><option>التأخر عن الحصة الدراسية</option>
+        </select>
+      </div>
+      <div class="field"><div class="label"><span class="left">👨‍🏫 اسم المعلم أو الإداري</span><span class="badge">مطلوب</span></div><input id="teacher" name="اسم المعلم أو الإداري" type="text" placeholder="اكتب الاسم" required></div>
+      <div class="field"><div class="label"><span class="left">📘 التخصص</span><span class="badge">مطلوب</span></div><input id="major" name="التخصص" type="text" placeholder="مثال: رياضيات / لغة عربية" required></div>
+      <div class="field"><div class="label"><span class="left">📝 ملاحظات أخرى</span></div><textarea id="notes" name="ملاحظات أخرى" placeholder="اكتب أي ملاحظات (اختياري)"></textarea></div>
+    </form>
+    <div class="table-wrap"><table id="dataTable"><thead></thead><tbody></tbody></table></div>
+  </div>
+
+  <div class="actions-wrap">
+    <div class="actions">
+      <button class="btn send" id="sendBtn" type="submit" data-action="send"><span class="icon">💾</span> حفظ/إرسال للمشرف</button>
+      <div class="btn-row">
+        <button class="btn csv" id="exportCSV"><span class="icon">📄</span> CSV</button>
+        <button class="btn xlsx" id="exportXLSX"><span class="icon">📊</span> Excel</button>
+        <button class="btn delete" id="clearAll"><span class="icon">🗑️</span> حذف</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="passModal" role="dialog" aria-modal="true" aria-labelledby="passTitle">
+    <div class="box">
+      <h3 id="passTitle">🔐 أدخل رمز ملفات المشرف</h3>
+      <div class="row" style="margin-bottom:10px">
+        <input type="password" id="adminCode" placeholder="••••" inputmode="numeric" pattern="\d*">
+      </div>
+      <div class="row">
+        <button class="action" id="passOk">تأكيد</button>
+        <button class="action cancel" id="passCancel">إلغاء</button>
+      
+<script>
+// === إعدادات عامة ===
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxbM7zmeN1gW_ryUSVdTkI8XKkMFyICb2RYbjwBIzc5Hean6J35BI9efjODhvdlnw/exec';
+
+// أدوات صغيرة
+const $=(s,c=document)=>c.querySelector(s);
+const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+const STORAGE_KEY='customFormRecords.v1';
+const ADMIN_CODE='1982';
+
+function readForm(){
+  const row={};
+  $$('#dataForm [name]').forEach(el=>{ row[el.name]=el.value||''; });
+  return row;
+}
+
+function clearAllFields(){
+  try{ 
+    const form = $('#dataForm');
+    if(form && typeof form.reset==='function') form.reset();
+    $$('#dataForm input, #dataForm select, #dataForm textarea').forEach(el=>{
+      try{
+        if(el.type==='checkbox'||el.type==='radio'){ el.checked=false; el.dispatchEvent(new Event('change',{bubbles:true})); }
+        else if(el.tagName==='SELECT'){ el.selectedIndex=0; el.dispatchEvent(new Event('change',{bubbles:true})); }
+        else { el.value=''; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }
+      }catch(_){}
+    });
+    $$('[data-display], .select-display, .selected-text, .current, .value-label').forEach(d=>{
+      const ph=d.getAttribute('data-placeholder')||d.getAttribute('placeholder')||'اختر...'; d.textContent=ph;
+    });
+    $$('.selected, .is-selected, .active').forEach(el=>el.classList.remove('selected','is-selected','active'));
+    ($('#studentName')||$('#dataForm input, #dataForm select, #dataForm textarea'))?.focus();
+  }catch(e){ console.warn('clearAllFields', e); }
+}
+
+function loadRecords(){ try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');}catch{return [];} }
+function saveRecords(list){ localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+function renderTable(){
+  const list=loadRecords(); const thead=$('#dataTable thead'); const tbody=$('#dataTable tbody');
+  if(!list.length){ thead.innerHTML=''; tbody.innerHTML=''; return; }
+  const cols=Object.keys(list[0]);
+  thead.innerHTML='<tr>'+cols.map(c=>`<th>${c}</th>`).join('')+'</tr>';
+  tbody.innerHTML=list.map(r=>'<tr>'+cols.map(c=>`<td>${(r[c]||'').toString().replace(/</g,'&lt;')}</td>`).join('')+'</tr>').join('');
+}
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); }
+
+function exportCSV(){
+  const list=loadRecords(); if(!list.length) return alert('لا توجد سجلات للتصدير');
+  const cols=Object.keys(list[0]); const esc=s=>'"'+String(s||'').replace(/"/g,'""')+'"';
+  const lines=[cols.map(esc).join(',')]; for(const r of list) lines.push(cols.map(k=>esc(r[k])).join(','));
+  const csv='\uFEFF'+lines.join('\n'); const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})); a.download='records_'+Date.now()+'.csv'; a.click();
+  toast('تم إنشاء ملف CSV');
+}
+function exportXLSX(){
+  const list=loadRecords(); if(!list.length) return alert('لا توجد سجلات للتصدير');
+  try{ const ws=XLSX.utils.json_to_sheet(list); const wb=XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb,ws,'البيانات'); XLSX.writeFile(wb,'records_'+Date.now()+'.xlsx'); toast('تم تنزيل ملف Excel'); }
+  catch(err){ console.error(err); alert('تعذر إنشاء ملف Excel — استخدم CSV'); }
+}
+
+let pendingAction=null;
+function openPassModal(action){ pendingAction=action; $('#adminCode').value=''; $('#passModal').style.display='flex'; $('#adminCode').focus(); }
+function closePassModal(){ $('#passModal').style.display='none'; }
+function checkPassAndRun(){
+  const code=($('#adminCode').value||'').trim();
+  if(code!=='1982') return alert('الرمز غير صحيح');
+  if(pendingAction==='xlsx') exportXLSX();
+  else if(pendingAction==='csv') exportCSV();
+  else if(pendingAction==='clear'){ localStorage.removeItem(STORAGE_KEY); renderTable(); toast('تم حذف جميع السجلات'); }
+  closePassModal(); pendingAction=null;
+}
+
+async function sendToSupervisor(){
+  const formValues = readForm();
+  const reqKeys = ['اسم الطالب','الصف الدراسي','الشعبة','اسم المعلم أو الإداري','التخصص'];
+  const missing = reqKeys.filter(k => !formValues[k]);
+  if(missing.length) return alert('يرجى تعبئة جميع الحقول المطلوبة: '+missing.join('، '));
+
+  const now = new Date();
+  const ts = new Intl.DateTimeFormat('ar-SA', {year:'numeric', month:'long', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:true}).format(now);
+  const payload = {
+    'طابع زمني': ts,
+    'اسم الطالب': formValues['اسم الطالب'],
+    'الصف': formValues['الصف الدراسي'],
+    'الشعبة': formValues['الشعبة'],
+    'المخالفة': formValues['المخالفات الطلابية']||'',
+    'اسم المعلم أو الإداري': formValues['اسم المعلم أو الإداري'],
+    'التخصص': formValues['التخصص'],
+    'ملاحظات أخرى': formValues['ملاحظات أخرى']||''
+  };
+
+  try{ const list=loadRecords(); list.push(payload); saveRecords(list); renderTable(); }catch(_){}
+
+  let ok=false, msg='';
+  try{
+    const resp = await fetch(GAS_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
+    const j = await resp.json().catch(()=>({}));
+    ok = resp.ok && (j.status==='ok' || j.status==='success' || !Object.keys(j).length);
+    msg = ok ? 'تم الإرسال للمشرف ✅' : 'تعذر الإرسال — تم الحفظ محليًا';
+  }catch(e){ console.error(e); msg='تعذر الإرسال — تم الحفظ محليًا'; }
+
+  try{ (window.toast||alert)(msg); }catch(_){}
+  if(ok){ try{ clearAllFields(); }catch(_){ } }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  $('#sendBtn')?.addEventListener('click', e=>{ e.preventDefault(); sendToSupervisor(); });
+  $('#dataForm')?.addEventListener('submit', e=>{ e.preventDefault(); sendToSupervisor(); });
+  $('#exportCSV')?.addEventListener('click', e=>{ e.preventDefault(); openPassModal('csv'); });
+  $('#exportXLSX')?.addEventListener('click', e=>{ e.preventDefault(); openPassModal('xlsx'); });
+  $('#clearAll')?.addEventListener('click', e=>{ e.preventDefault(); openPassModal('clear'); });
+  $('#passOk')?.addEventListener('click', e=>{ e.preventDefault(); checkPassAndRun(); });
+  $('#passCancel')?.addEventListener('click', e=>{ e.preventDefault(); pendingAction=null; closePassModal(); });
+  renderTable();
+});
+</script>
+
+
+<script>
+if (typeof GAS_URL === 'undefined' || !GAS_URL) { window.GAS_URL = 'https://script.google.com/macros/s/AKfycbxbM7zmeN1gW_ryUSVdTkI8XKkMFyICb2RYbjwBIzc5Hean6J35BI9efjODhvdlnw/exec'; }
+const $=(s,c=document)=>c.querySelector(s);
+const $$=(s,c=document)=>Array.from(c.querySelectorAll(s));
+
+function readFormLoose(){
+  const row={};
+  $$('#dataForm [name], [name]').forEach(el=>{
+    const nm = el.getAttribute('name'); if(!nm) return;
+    if(el.type==='checkbox') row[nm] = el.checked ? (el.value||'نعم') : '';
+    else row[nm] = el.value||'';
+  });
+  return row;
+}
+
+function clearAllFieldsHard(){
+  try{
+    $$('form').forEach(f=>{ try{f.reset();}catch(_){}});
+    $$('input, select, textarea').forEach(el=>{
+      try{
+        if(el.type==='checkbox'||el.type==='radio'){ if(el.checked){ el.checked=false; el.dispatchEvent(new Event('change',{bubbles:true})); } }
+        else if(el.tagName==='SELECT'){ el.selectedIndex=0; el.dispatchEvent(new Event('change',{bubbles:true})); }
+        else { el.value=''; el.dispatchEvent(new Event('input',{bubbles:true})); el.dispatchEvent(new Event('change',{bubbles:true})); }
+      }catch(_){}
+    });
+    $$('[data-display], .select-display, .selected-text, .current, .value-label').forEach(d=>{
+      const ph=d.getAttribute('data-placeholder')||d.getAttribute('placeholder')||'اختر...'; d.textContent=ph;
+    });
+    $$('.selected, .is-selected, .active').forEach(el=>el.classList.remove('selected','is-selected','active'));
+    const first = document.getElementById('studentName') || $('input[type="text"], textarea, select');
+    if(first) try{first.focus();}catch(_){}
+  }catch(e){ console.warn('clearAllFieldsHard', e); }
+}
+
+function toast(msg){ try{const t=$('#toast'); if(t){t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',1500); return;} }catch(_){ } alert(msg); }
+
+async function sendToSupervisor(){
+  const v = readFormLoose();
+  const need = ['اسم الطالب','الصف الدراسي','الشعبة','اسم المعلم أو الإداري','التخصص'];
+  const miss = need.filter(k => v[k]===undefined || v[k]==='');
+  if(miss.length){ alert('يرجى تعبئة الحقول المطلوبة: '+miss.join('، ')); return; }
+
+  const ts = new Intl.DateTimeFormat('ar-SA', {year:'numeric', month:'long', day:'2-digit', hour:'2-digit', minute:'2-digit', hour12:true}).format(new Date());
+  const payload = {
+    'طابع زمني': ts,
+    'اسم الطالب': v['اسم الطالب']||'',
+    'الصف': v['الصف الدراسي']||'',
+    'الشعبة': v['الشعبة']||'',
+    'المخالفة': v['المخالفات الطلابية']||'',
+    'اسم المعلم أو الإداري': v['اسم المعلم أو الإداري']||'',
+    'التخصص': v['التخصص']||'',
+    'ملاحظات أخرى': v['ملاحظات أخرى']||''
+  };
+
+  let ok=false;
+  try{
+    const resp = await fetch(GAS_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload)});
+    if(resp.type==='opaque') ok=true;
+    else { let j=null; try{ j=await resp.json(); }catch(_){ } ok = !!(resp.ok && j && (j.status==='ok' || j.status==='success')); }
+  }catch(e){ console.error(e); ok=false; }
+
+  toast(ok ? 'تم الإرسال للمشرف ✅' : 'تعذر الإرسال — تم الحفظ محليًا');
+  if(ok) clearAllFieldsHard();
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  const btn = document.getElementById('sendBtn') || document.querySelector('[data-action="send"]');
+  if(btn) btn.addEventListener('click', function(e){ e.preventDefault(); sendToSupervisor(); });
+  document.querySelectorAll('form').forEach(f=>{
+    f.addEventListener('submit', function(e){ e.preventDefault(); sendToSupervisor(); });
+  });
+});
+</script>
+
+</body>
+</html>
