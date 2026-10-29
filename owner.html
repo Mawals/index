@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة مالك حجز المختبرات</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root{
+  --ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--soft:#f8fafc;
+  --brand:#0f5e6e;--brand2:#14899d;--accent:#6366f1;--ok:#059669;--okbg:#d1fae5;--bad:#e11d48;--badbg:#ffe4e6;--warn:#b45309;--warnbg:#fef3c7;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:'Tajawal',system-ui,sans-serif;color:#e2e8f0;min-height:100vh;
+  background:radial-gradient(circle at 10% 10%,rgba(20,137,157,.22),transparent 30%),
+             radial-gradient(circle at 90% 20%,rgba(99,102,241,.18),transparent 32%),
+             linear-gradient(135deg,#07111f,#111827 55%,#0b1220);background-attachment:fixed}
+button{font:inherit;cursor:pointer;border:0;transition:transform .15s,background .15s,box-shadow .15s}
+button:hover{transform:translateY(-1px)}
+input{font:inherit}
+.wrap{max-width:1100px;margin:auto;padding:28px 16px 40px}
+.card{background:rgba(255,255,255,.97);color:var(--ink);border-radius:24px;padding:22px;box-shadow:0 18px 50px rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12)}
+.card+.card{margin-top:20px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;border-top:4px solid var(--brand2);margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;display:grid;place-items:center;font-size:24px;box-shadow:0 8px 20px rgba(15,94,110,.35);flex:none}
+h1{margin:0;font-size:24px;font-weight:900}
+h1 span{color:var(--brand2)}
+.sub{margin:3px 0 0;color:var(--muted);font-size:14px}
+.live{display:none;align-items:center;gap:8px;background:var(--okbg);color:#065f46;border-radius:30px;padding:7px 14px;font-size:12.5px;font-weight:800}
+.live i{width:9px;height:9px;border-radius:50%;background:#10b981;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.sec{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding-bottom:14px;margin-bottom:16px;border-bottom:1px solid #f1f5f9}
+.sec h2{margin:0;font-size:19px;font-weight:800;display:flex;align-items:center;gap:10px}
+.sec h2 .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:16px}
+.login{max-width:420px;margin:30px auto 0;text-align:center}
+.login .big{width:66px;height:66px;border-radius:50%;background:#ecfeff;color:var(--brand2);display:grid;place-items:center;font-size:28px;margin:4px auto 12px}
+.login h2{margin:0 0 6px}
+.login p{color:var(--muted);margin:0 0 18px;font-size:14px}
+.field{display:block;margin-bottom:14px;text-align:right}
+.field>span{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px;color:#334155}
+.field>span em{font-style:normal;color:var(--muted);font-weight:500}
+.inp{position:relative}
+.inp i{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#94a3b8}
+.inp input{width:100%;padding:12px 40px 12px 14px;background:var(--soft);border:1.5px solid var(--line);border-radius:14px;color:var(--ink);font-size:15px}
+.inp input:focus{outline:none;border-color:var(--brand2);background:#fff;box-shadow:0 0 0 3px rgba(20,137,157,.15)}
+.inp input[dir=ltr]{text-align:left}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:640px){.grid2{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:14px;font-weight:800;font-size:15px;background:#f1f5f9;color:#334155}
+.btn.main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 8px 18px rgba(15,94,110,.28)}
+.btn.green{background:linear-gradient(135deg,#059669,#0d9488);color:#fff;box-shadow:0 8px 18px rgba(5,150,105,.25)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
+.sm{padding:7px 11px;border-radius:10px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.sm.indigo{background:#eef2ff;color:#4338ca}.sm.amber{background:var(--warnbg);color:var(--warn)}
+.sm.rose{background:var(--badbg);color:var(--bad)}.sm.green{background:var(--okbg);color:var(--ok)}.sm.gray{background:#f1f5f9;color:#475569}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.stat{background:var(--soft);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:center}
+.stat b{display:block;font-size:26px;font-weight:900;color:var(--brand)}
+.stat span{font-size:12.5px;color:var(--muted);font-weight:700}
+.schools{display:grid;gap:12px}
+.sch{border:1.5px solid var(--line);border-radius:18px;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:10px 14px;align-items:center;background:#fff}
+.sch.off{background:#fafafa}
+.sch .nm{font-weight:800;font-size:16.5px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tag{font-size:11px;font-weight:800;border-radius:20px;padding:3px 9px;display:inline-flex;align-items:center;gap:5px}
+.tag.on{background:var(--okbg);color:#065f46}.tag.off{background:var(--badbg);color:#9f1239}.tag.main{background:#e0f2fe;color:#075985}
+.tag .d{width:6px;height:6px;border-radius:50%;background:currentColor}
+.meta{font-size:12.5px;color:var(--muted);margin-top:4px;display:flex;gap:12px;flex-wrap:wrap}
+.meta code{font-family:ui-monospace,Consolas,monospace;background:#f1f5f9;border-radius:6px;padding:1px 6px;color:#334155;direction:ltr}
+.acts{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:720px){.sch{grid-template-columns:1fr}.acts{justify-content:flex-start}}
+.empty,.loading{text-align:center;color:#94a3b8;padding:36px 0}
+.notice{margin-top:16px;padding:16px;border-radius:16px;background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+.notice b.t{display:flex;align-items:center;gap:8px;font-size:16px;margin-bottom:10px}
+.linkrow{display:flex;gap:8px;margin:8px 0}
+.linkrow input{flex:1;min-width:0;padding:11px 12px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;color:var(--ink)}
+@media(max-width:520px){.linkrow{flex-direction:column}}
+.base{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.7}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(2,6,23,.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal.open{display:flex}
+.box{background:#fff;color:var(--ink);border-radius:22px;width:100%;max-width:440px;max-height:92vh;overflow:auto;padding:22px;box-shadow:0 25px 60px rgba(0,0,0,.4);animation:pop .16s ease}
+@keyframes pop{from{transform:scale(.96);opacity:0}}
+.box .mi{font-size:34px;text-align:center;margin-bottom:6px}
+.box h3{margin:0 0 8px;text-align:center;font-size:19px}
+.box p{margin:0 0 14px;text-align:center;color:#475569;line-height:1.75;white-space:pre-line;font-size:14.5px}
+.box .row{display:flex;gap:8px;margin-top:6px}
+.box .row .btn{flex:1}
+#qr{display:flex;justify-content:center;padding:12px;background:#fff;border:1px solid var(--line);border-radius:16px;margin:10px 0}
+#qr img,#qr canvas{max-width:100%}
+.toast{position:fixed;bottom:18px;left:50%;transform:translate(-50%,30px);background:#0f172a;color:#fff;padding:11px 18px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.ok{background:#059669}.toast.err{background:#e11d48}
+.foot{text-align:center;color:#64748b;font-size:12px;margin-top:22px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card head">
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-flask-vial"></i></div>
+      <div>
+        <h1>لوحة مالك <span>حجز المختبرات</span></h1>
+        <p class="sub">إنشاء روابط للمدارس — لكل مدرسة حجوزاتها وإعداداتها ورمز فنيها المستقل.</p>
+      </div>
+    </div>
+    <div class="live" id="live"><i></i> متصل بالنظام</div>
+  </div>
+
+  <!-- تسجيل الدخول -->
+  <div class="card login" id="login">
+    <div class="big"><i class="fa-solid fa-key"></i></div>
+    <h2>دخول المالك</h2>
+    <p>أدخل رمز المالك للوصول إلى لوحة التحكم.</p>
+    <label class="field"><div class="inp"><i class="fa-solid fa-lock"></i>
+      <input id="ownerPin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="رمز المالك" style="text-align:center;letter-spacing:4px"></div></label>
+    <button class="btn main block" id="loginBtn"><i class="fa-solid fa-arrow-right-to-bracket"></i> دخول اللوحة</button>
+  </div>
+
+  <div id="panel" hidden>
+    <!-- إضافة مدرسة -->
+    <div class="card">
+      <div class="sec"><h2><span class="ic" style="background:#ede9fe;color:#7c3aed"><i class="fa-solid fa-school-circle-check"></i></span> إضافة مدرسة جديدة</h2></div>
+      <div class="grid2">
+        <label class="field"><span>اسم المدرسة</span><div class="inp"><i class="fa-solid fa-graduation-cap"></i>
+          <input id="newName" placeholder="مثال: مدرسة الخليل للتعليم الأساسي"></div></label>
+        <label class="field"><span>رمز فني المدرسة <em>(4 أرقام أو أكثر — يُعطى لفني المدرسة)</em></span><div class="inp"><i class="fa-solid fa-user-gear"></i>
+          <input id="newPin" inputmode="numeric" maxlength="10" placeholder="مثال: 2580" dir="ltr"></div></label>
+      </div>
+      <button class="btn green" id="createBtn"><i class="fa-solid fa-plus-circle"></i> إنشاء المدرسة وتوليد الرابط</button>
+      <div id="created"></div>
+    </div>
+
+    <!-- قائمة المدارس -->
+    <div class="card">
+      <div class="sec">
+        <h2><span class="ic" style="background:#dbeafe;color:#2563eb"><i class="fa-solid fa-building-columns"></i></span> المدارس المسجلة</h2>
+        <button class="sm gray" id="refreshBtn"><i class="fa-solid fa-rotate"></i> تحديث</button>
+      </div>
+      <div class="stats" id="stats"></div>
+      <div class="schools" id="list"><div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل…</div></div>
+    </div>
+
+    <!-- الإعداد -->
+    <div class="card">
+      <div class="sec"><h2><span class="ic" style="background:#f1f5f9;color:#475569"><i class="fa-solid fa-gear"></i></span> رابط صفحة الحجز</h2></div>
+      <label class="field"><span>رابط صفحة الحجز الأساسية <em>(الرابط الذي نشرته سابقًا)</em></span><div class="inp"><i class="fa-solid fa-link"></i>
+        <input id="baseUrl" dir="ltr" placeholder="https://username.github.io/lab/index.html"></div></label>
+      <div class="base">تُبنى روابط المدارس من هذا الرابط بإضافة <code dir="ltr">?s=رمز</code> في آخره. الرابط الأساسي نفسه (بدون رمز) يبقى للمدرسة الأساسية ولا يتغير.</div>
+    </div>
+  </div>
+
+  <div class="foot">لوحة خاصة بالمالك — لا تشارك رابطها أو رمزها مع أحد</div>
+</div>
+
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+// نفس رابط تطبيق الويب (Apps Script) المستخدم في صفحة الحجز
+var API_URL = 'https://script.google.com/macros/s/AKfycbwWCnVpHApCgJ4vPar7ciYVcNHyFyX_ZBQQ1bw9u50U0aERi8d9FGvAUS5HgbL4-7TQ/exec';
+
+var $ = function (s) { return document.querySelector(s); };
+var pin = '';
+var schools = [];
+var DEMO = /[?&]demo\b/.test(location.search);
+
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
+
+/* ---------- الاتصال (JSONP: يعمل في كل المتصفحات) ---------- */
+var seq = 0;
+function api(fn) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  if (DEMO) return Mock(fn, args);
+  return new Promise(function (resolve, reject) {
+    var cb = '__own_cb_' + Date.now().toString(36) + '_' + (++seq), sc = document.createElement('script'), done = false;
+    function end() { done = true; clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } if (sc.parentNode) sc.parentNode.removeChild(sc); }
+    var t = setTimeout(function () { if (!done) { end(); reject(new Error('انتهت مهلة الاتصال بالخادم، حاول مرة أخرى')); } }, 30000);
+    window[cb] = function (d) { if (done) return; end(); if (d && d.ok === false) reject(new Error(d.msg || 'حدث خطأ')); else resolve(d); };
+    sc.onerror = function () { if (done) return; end(); reject(new Error('تعذر الاتصال بالخادم. تأكد من الإنترنت ومن نشر Code.gs الجديد.')); };
+    sc.src = API_URL + '?action=' + encodeURIComponent(fn) + '&args=' + encodeURIComponent(JSON.stringify(args)) + '&callback=' + cb + '&_=' + Date.now();
+    document.head.appendChild(sc);
+  });
+}
+
+/* ---------- واجهة ---------- */
+var tId;
+function toast(msg, kind) { var t = $('#toast'); t.textContent = msg; t.className = 'toast show ' + (kind || ''); clearTimeout(tId); tId = setTimeout(function () { t.className = 'toast'; }, 3000); }
+function closeModal() { $('#modal').classList.remove('open'); }
+$('#modal').addEventListener('click', function (e) { if (e.target.id === 'modal' || e.target.closest('[data-close]')) closeModal(); });
+document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeModal(); });
+
+// نافذة عامة: معلومات / تأكيد / إدخال
+function dialog(o) {
+  $('#box').innerHTML = '<div class="mi">' + (o.icon || '<i class="fa-solid fa-circle-info" style="color:#6366f1"></i>') + '</div>' +
+    '<h3>' + esc(o.title) + '</h3>' + (o.msg ? '<p>' + esc(o.msg) + '</p>' : '') + (o.html || '') +
+    (o.input ? '<label class="field"><div class="inp"><i class="fa-solid ' + (o.inputIcon || 'fa-pen') + '"></i><input id="dlgIn" ' + (o.inputAttrs || '') + ' value="' + esc(o.value || '') + '"></div></label>' : '') +
+    '<div class="row">' + (o.onOk ? '<button class="btn ' + (o.danger ? '' : 'main') + '" id="dlgOk"' + (o.danger ? ' style="background:#e11d48;color:#fff"' : '') + '>' + esc(o.ok || 'تأكيد') + '</button>' : '') +
+    '<button class="btn" data-close>' + (o.onOk ? 'إلغاء' : 'حسنًا') + '</button></div>';
+  $('#modal').classList.add('open');
+  var inp = $('#dlgIn');
+  if (inp) { setTimeout(function () { inp.focus(); inp.select(); }, 60); }
+  if (o.onOk) {
+    var go = function () {
+      var b = $('#dlgOk'); b.disabled = true;
+      Promise.resolve(o.onOk(inp ? inp.value.trim() : undefined)).then(function (keep) { if (keep !== false) closeModal(); else b.disabled = false; },
+        function (e) { b.disabled = false; toast(e.message, 'err'); });
+    };
+    $('#dlgOk').onclick = go;
+    if (inp) inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') go(); });
+  }
+}
+
+/* ---------- الدخول ---------- */
+function doLogin() {
+  var v = $('#ownerPin').value.trim();
+  if (!v) return toast('اكتب رمز المالك', 'err');
+  var b = $('#loginBtn'); b.disabled = true;
+  api('ownerLogin', v).then(function () {
+    pin = v;
+    try { sessionStorage.setItem('ownerPin', v); } catch (e) {}
+    $('#login').hidden = true; $('#panel').hidden = false; $('#live').style.display = 'flex';
+    loadSchools();
+  }, function (e) { toast(e.message, 'err'); $('#ownerPin').select(); }).then(function () { b.disabled = false; });
+}
+$('#loginBtn').onclick = doLogin;
+$('#ownerPin').addEventListener('keydown', function (e) { if (e.key === 'Enter') doLogin(); });
+
+/* ---------- رابط صفحة الحجز ---------- */
+function guessBase() { return location.href.split(/[?#]/)[0].replace(/[^\/]*$/, '') + 'index.html'; }
+$('#baseUrl').value = store('labBaseUrl') || guessBase();
+$('#baseUrl').addEventListener('change', function () { var v = this.value.trim().split(/[?#]/)[0]; this.value = v; store('labBaseUrl', v); loadSchools(); toast('تم حفظ رابط صفحة الحجز', 'ok'); });
+function linkOf(s) { var base = $('#baseUrl').value.trim().split(/[?#]/)[0]; return s.main ? base : base + '?s=' + s.code; }
+
+/* ---------- المدارس ---------- */
+function loadSchools() {
+  return api('ownerSchools', pin).then(function (r) { schools = r.schools || []; render(); },
+    function (e) { $('#list').innerHTML = '<div class="empty" style="color:#e11d48"><i class="fa-solid fa-triangle-exclamation"></i> ' + esc(e.message) + '</div>'; });
+}
+
+function render() {
+  var active = schools.filter(function (s) { return s.active; }).length;
+  var total = schools.reduce(function (n, s) { return n + (s.bookings || 0); }, 0);
+  $('#stats').innerHTML =
+    '<div class="stat"><b>' + schools.length + '</b><span>مدرسة</span></div>' +
+    '<div class="stat"><b>' + active + '</b><span>رابط مفعّل</span></div>' +
+    '<div class="stat"><b>' + total + '</b><span>حجز إجمالي</span></div>';
+  if (!schools.length) { $('#list').innerHTML = '<div class="empty">لا توجد مدارس بعد.</div>'; return; }
+  $('#list').innerHTML = schools.map(function (s) {
+    var id = esc(s.id);
+    return '<div class="sch' + (s.active ? '' : ' off') + '">' +
+      '<div><div class="nm">' + esc(s.name || 'بدون اسم') +
+        (s.main ? ' <span class="tag main"><i class="fa-solid fa-star"></i> الرابط الأساسي</span>' : '') +
+        ' <span class="tag ' + (s.active ? 'on' : 'off') + '"><span class="d"></span>' + (s.active ? 'مفعّل' : 'معطّل') + '</span></div>' +
+        '<div class="meta"><span><i class="fa-regular fa-calendar-check"></i> ' + (s.bookings || 0) + ' حجز (' + (s.upcoming || 0) + ' قادمة)</span>' +
+        (s.main ? '<span>بدون رمز — الرابط المنشور سابقًا</span>' : '<span>الرمز: <code>' + esc(s.code) + '</code></span>') +
+        (s.created ? '<span><i class="fa-regular fa-clock"></i> ' + esc(s.created) + '</span>' : '') + '</div></div>' +
+      '<div class="acts">' +
+        '<button class="sm indigo" data-act="link" data-id="' + id + '"><i class="fa-solid fa-link"></i> الرابط</button>' +
+        '<button class="sm amber" data-act="rename" data-id="' + id + '"><i class="fa-solid fa-pen"></i> الاسم</button>' +
+        '<button class="sm gray" data-act="pin" data-id="' + id + '"><i class="fa-solid fa-key"></i> رمز الفني</button>' +
+        '<button class="sm ' + (s.active ? 'rose' : 'green') + '" data-act="toggle" data-id="' + id + '"><i class="fa-solid ' + (s.active ? 'fa-ban' : 'fa-check') + '"></i> ' + (s.active ? 'تعطيل' : 'تفعيل') + '</button>' +
+        (s.main ? '' : '<button class="sm rose" data-act="del" data-id="' + id + '"><i class="fa-solid fa-trash-can"></i> حذف الرابط</button>') +
+      '</div></div>';
+  }).join('');
+}
+
+$('#list').addEventListener('click', function (e) {
+  var b = e.target.closest('[data-act]'); if (!b) return;
+  var s = schools.filter(function (x) { return x.id === b.dataset.id; })[0]; if (!s) return;
+  ({ link: showLink, rename: rename, pin: resetPin, toggle: toggle, del: del })[b.dataset.act](s);
+});
+
+function showLink(s) {
+  var link = linkOf(s);
+  dialog({
+    icon: '<i class="fa-solid fa-qrcode" style="color:#14899d"></i>', title: 'رابط ' + (s.name || 'المدرسة'),
+    html: '<div class="linkrow"><input id="lk" readonly dir="ltr" value="' + esc(link) + '"></div>' +
+      '<div class="row" style="margin:0 0 4px"><button class="btn main" id="cpy"><i class="fa-solid fa-copy"></i> نسخ</button>' +
+      '<button class="btn" id="wa" style="background:#25d366;color:#fff"><i class="fa-brands fa-whatsapp"></i> واتساب</button>' +
+      '<button class="btn" id="opn"><i class="fa-solid fa-up-right-from-square"></i> فتح</button></div><div id="qr"></div>'
+  });
+  $('#cpy').onclick = function () { copy(link); };
+  $('#wa').onclick = function () {
+    var txt = '🧪 جدول حجز المختبرات — ' + (s.name || '') + '\nاحجز حصتك من الرابط:\n' + link;
+    window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+  };
+  $('#opn').onclick = function () { window.open(link, '_blank'); };
+  if (window.QRCode) new QRCode($('#qr'), { text: link, width: 190, height: 190, colorDark: '#0f172a', colorLight: '#ffffff' });
+  else $('#qr').style.display = 'none';
+}
+
+function copy(v) {
+  var done = function () { toast('تم نسخ الرابط ✔', 'ok'); };
+  if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(v).then(done, fallback); else fallback();
+  function fallback() { var i = $('#lk') || document.createElement('input'); i.value = v; if (!i.parentNode) document.body.appendChild(i); i.select(); try { document.execCommand('copy'); done(); } catch (e) { toast('انسخ الرابط يدويًا', 'err'); } }
+}
+
+function rename(s) {
+  dialog({ icon: '<i class="fa-solid fa-pen" style="color:#b45309"></i>', title: 'تعديل اسم المدرسة', input: true, inputIcon: 'fa-graduation-cap', value: s.name, ok: 'حفظ',
+    onOk: function (v) { if (!v) { toast('اكتب الاسم', 'err'); return false; }
+      return api('ownerUpdateSchool', pin, s.id, v).then(function () { toast('تم تعديل الاسم', 'ok'); loadSchools(); }); } });
+}
+
+function resetPin(s) {
+  dialog({ icon: '<i class="fa-solid fa-key" style="color:#475569"></i>', title: 'رمز فني «' + (s.name || '') + '»',
+    msg: 'اكتب رمزًا جديدًا لفني هذه المدرسة (4 أرقام أو أكثر).\nاستخدمه إذا نسي الفني رمزه.', input: true, inputIcon: 'fa-user-gear', inputAttrs: 'inputmode="numeric" maxlength="10" dir="ltr"', ok: 'حفظ الرمز',
+    onOk: function (v) { if (!/^\d{4,10}$/.test(v || '')) { toast('الرمز من 4 إلى 10 أرقام', 'err'); return false; }
+      return api('ownerResetPin', pin, s.id, v).then(function () { toast('تم تغيير رمز الفني', 'ok'); }); } });
+}
+
+function toggle(s) {
+  dialog({ icon: s.active ? '<i class="fa-solid fa-ban" style="color:#e11d48"></i>' : '<i class="fa-solid fa-circle-check" style="color:#059669"></i>',
+    title: (s.active ? 'تعطيل' : 'تفعيل') + ' «' + (s.name || '') + '»',
+    msg: s.active ? 'لن يتمكن أحد من فتح جدول هذه المدرسة حتى تعيد تفعيله.\nالحجوزات تبقى محفوظة.' : 'سيعود رابط المدرسة للعمل مباشرة.',
+    ok: s.active ? 'تعطيل' : 'تفعيل', danger: s.active,
+    onOk: function () { return api('ownerToggleSchool', pin, s.id, !s.active).then(function () { toast(s.active ? 'تم التعطيل' : 'تم التفعيل', 'ok'); loadSchools(); }); } });
+}
+
+function del(s) {
+  dialog({ icon: '<i class="fa-solid fa-trash-can" style="color:#e11d48"></i>', title: 'حذف رابط «' + (s.name || '') + '»',
+    msg: 'سيتوقف الرابط نهائيًا ولا يمكن استرجاعه.\nالحجوزات المحفوظة لن تُحذف وتبقى في ورقة «الحجوزات».', ok: 'حذف الرابط', danger: true,
+    onOk: function () { return api('ownerDeleteSchool', pin, s.id).then(function () { toast('تم حذف الرابط', 'ok'); loadSchools(); }); } });
+}
+
+$('#refreshBtn').onclick = function () { loadSchools().then(function () { toast('تم التحديث'); }); };
+
+$('#createBtn').onclick = function () {
+  var name = $('#newName').value.trim(), tp = $('#newPin').value.trim();
+  if (!name) return toast('اكتب اسم المدرسة', 'err');
+  if (!/^\d{4,10}$/.test(tp)) return toast('رمز الفني من 4 إلى 10 أرقام', 'err');
+  var b = this; b.disabled = true;
+  api('ownerCreateSchool', pin, { name: name, techPin: tp }).then(function (r) {
+    var s = r.school, link = linkOf(s);
+    $('#created').innerHTML = '<div class="notice"><b class="t"><i class="fa-solid fa-circle-check"></i> تم إنشاء «' + esc(s.name) + '»</b>' +
+      '<div class="linkrow"><input id="lk" readonly dir="ltr" value="' + esc(link) + '"><button class="btn main" id="cpyNew"><i class="fa-solid fa-copy"></i> نسخ الرابط</button></div>' +
+      '<div style="font-size:13px;line-height:1.8">أرسل لفني المدرسة: <b>الرابط</b> + <b>رمز الفني ' + esc(tp) + '</b>.<br>يستطيع الفني بعد الدخول تعديل المختبرات والحصص والأوقات من ⚙️ الإعدادات.</div></div>';
+    $('#cpyNew').onclick = function () { copy(link); };
+    $('#newName').value = ''; $('#newPin').value = '';
+    loadSchools();
+  }, function (e) { toast(e.message, 'err'); }).then(function () { b.disabled = false; });
+};
+
+/* دخول تلقائي داخل نفس الجلسة */
+(function () { var p = null; try { p = sessionStorage.getItem('ownerPin'); } catch (e) {} if (p) { $('#ownerPin').value = p; doLogin(); } })();
+
+/* ---------- وضع المعاينة (?demo) ---------- */
+function Mock(fn, a) {
+  var db = Mock.db || (Mock.db = { list: [
+    { id: 'main', code: '', main: true, name: 'المدرسة الأساسية', active: true, created: '', bookings: 37, upcoming: 9 },
+    { id: 's1a2b3c4', code: 'k7m2qx', main: false, name: 'مدرسة تجريبية', active: true, created: '2026-10-29', bookings: 4, upcoming: 2 }] });
+  var ok = function (v) { return new Promise(function (r) { setTimeout(function () { r(v || { ok: true }); }, 200); }); };
+  var find = function (id) { return db.list.filter(function (x) { return x.id === id; })[0]; };
+  if (fn !== 'ownerLogin' && a[0] !== '9999' || fn === 'ownerLogin' && a[0] !== '9999') return Promise.reject(new Error('رمز المالك غير صحيح'));
+  if (fn === 'ownerLogin') return ok();
+  if (fn === 'ownerSchools') return ok({ ok: true, schools: db.list.slice() });
+  if (fn === 'ownerCreateSchool') { var s = { id: 's' + Date.now(), code: Math.random().toString(36).slice(2, 8), main: false, name: a[1].name, active: true, created: '2026-10-29', bookings: 0, upcoming: 0 }; db.list.push(s); return ok({ ok: true, school: s }); }
+  if (fn === 'ownerUpdateSchool') { find(a[1]).name = a[2]; return ok(); }
+  if (fn === 'ownerToggleSchool') { find(a[1]).active = a[2]; return ok(); }
+  if (fn === 'ownerDeleteSchool') { db.list = db.list.filter(function (x) { return x.id !== a[1]; }); return ok(); }
+  return ok();
+}
+</script>
+</body>
+</html>
